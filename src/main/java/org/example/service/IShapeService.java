@@ -1,11 +1,9 @@
 package org.example.service;
 
-import org.example.model.IShape;
-
-import java.util.*;
+import java.util.Map;
 
 public interface IShapeService {
-    void addShape(IShape shape);
+    void addShape(String name, double length);
     String displayShape(String name);
-    List<IShape> getAllShapes();
+    Map<String, Double> getAllShapes();
 }

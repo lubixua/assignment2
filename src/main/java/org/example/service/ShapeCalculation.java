@@ -1,37 +1,54 @@
 package org.example.service;
 
-import org.example.model.IShape;
-import org.example.repository.ShapeRepository;
+import org.example.repository.IShapeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Primary;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import java.util.Map;
 
-import java.util.List;
-
-@Service
-@Primary
+@Service("FullInfo")
+@Qualifier()
 public class ShapeCalculation implements IShapeService {
-    private final ShapeRepository shapeRepository;
+    private final IShapeRepository shapeRepository;
 
     @Autowired
-    public ShapeCalculation(ShapeRepository shapeRepository) {
+    public ShapeCalculation(IShapeRepository shapeRepository) {
         this.shapeRepository = shapeRepository;
+        System.out.println("Eager Bean: Calculation");
     }
 
     @Override
-    public void addShape(IShape shape) {
-        shapeRepository.storeShapes(shape);
+    public void addShape(String name, double length) {
+        shapeRepository.storeShape(name, length);
     }
 
     @Override
-    public List<IShape> getAllShapes() {
+    public Map<String, Double> getAllShapes() {
         return shapeRepository.findAllShapes();
     }
 
     @Override
     public String displayShape(String name) {
-        IShape shape = shapeRepository.findShape(name);
-        if(shape == null){ return "Shape not found"; }
-        return String.format("Name: %s\nArea: %f\nPerimeter: %f", name, shape.calculateArea(), shape.calculatePerimeter());
+        double area;
+        double perimeter;
+
+        Double length = shapeRepository.findShape(name);
+        if (length == null) {return "Shape not found";}
+
+        switch (name) {
+            case "Square":
+                area = Math.pow(length, 2);
+                perimeter = 4 * length;
+                break;
+            case "Circle":
+                area = Math.PI * Math.pow(length, 2);
+                perimeter = 2 * Math.PI * length;
+                break;
+            default:
+                return "Shape not found";
+        }
+
+        return String.format("Name: %s\nLength: %.2f\nArea: %.2f\nPerimeter: %.2f\n",
+                name, length, area, perimeter);
     }
 }

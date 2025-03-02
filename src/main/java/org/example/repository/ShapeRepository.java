@@ -1,26 +1,29 @@
 package org.example.repository;
 
-import org.example.model.IShape;
-
 import org.springframework.stereotype.Repository;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 @Repository
 public class ShapeRepository implements IShapeRepository {
-    private final Map<String, IShape> shapes = new HashMap<>();
+    private final Map<String, Double> shapes = new HashMap<>();
 
-    @Override
-    public void storeShapes(IShape shape) {
-        shapes.put(shape.getName(), shape);
+    public ShapeRepository() {
+        System.out.println("Eager Bean: Repository");
     }
 
     @Override
-    public List<IShape> findAllShapes() {
-        return new ArrayList<>(shapes.values());
+    public void storeShape(String name, double length) {
+        shapes.put(name, length);
     }
 
     @Override
-    public IShape findShape(String name) {
+    public Map<String, Double> findAllShapes() {
+        return new HashMap<>(shapes);
+    }
+
+    @Override
+    public Double findShape(String name) {
         return shapes.get(name);
     }
 }

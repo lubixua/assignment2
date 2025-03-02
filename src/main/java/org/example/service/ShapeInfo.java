@@ -1,9 +1,7 @@
 package org.example.service;
 
-import java.util.*;
-
-import org.example.model.IShape;
-import org.example.repository.ShapeRepository;
+import java.util.Map;
+import org.example.repository.IShapeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
@@ -11,27 +9,28 @@ import org.springframework.stereotype.Service;
 @Service
 @Primary
 public class ShapeInfo implements IShapeService {
-    private final ShapeRepository shapeRepository;
+    private final IShapeRepository shapeRepository;
 
     @Autowired
-    public ShapeInfo(ShapeRepository shapeRepository) {
+    public ShapeInfo(IShapeRepository shapeRepository) {
         this.shapeRepository = shapeRepository;
+        System.out.println("Eager Bean: Info");
     }
 
     @Override
-    public void addShape(IShape shape){
-        shapeRepository.storeShapes(shape);
+    public void addShape(String name, double length) {
+        shapeRepository.storeShape(name, length);
     }
 
     @Override
-    public List<IShape> getAllShapes() {
+    public Map<String, Double> getAllShapes() {
         return shapeRepository.findAllShapes();
     }
 
     @Override
-    public String displayShape(String name){
-        IShape shape = shapeRepository.findShape(name);
-        if(shape == null) {return "Shape not found";}
-        return String.format("Shape name: %s", name);
+    public String displayShape(String name) {
+        Double length = shapeRepository.findShape(name);
+        if (length == null) {return "Shape not found";}
+        return String.format("Shape name: %s\nLength: %f\n", name, length);
     }
 }
