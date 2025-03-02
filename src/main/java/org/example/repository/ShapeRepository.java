@@ -13,4 +13,14 @@ public class ShapeRepository implements IShapeRepository {
     public void storeShapes(IShape shape) {
         shapes.put(shape.getName(), shape);
     }
+
+    @Override
+    public List<IShape> findAllShapes() {
+        return new ArrayList<>(shapes.values());
+    }
+
+    @Override
+    public IShape findShape(String name) {
+        return shapes.get(name);
+    }
 }
