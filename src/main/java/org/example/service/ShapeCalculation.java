@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import java.util.Map;
 
 @Service("FullInfo")
-@Qualifier()
+@Qualifier("FullInfo")
 public class ShapeCalculation implements IShapeService {
     private final IShapeRepository shapeRepository;
 
@@ -35,12 +35,12 @@ public class ShapeCalculation implements IShapeService {
         Double length = shapeRepository.findShape(name);
         if (length == null) {return "Shape not found";}
 
-        switch (name) {
-            case "Square":
+        switch (name.toLowerCase()) {
+            case "square":
                 area = Math.pow(length, 2);
                 perimeter = 4 * length;
                 break;
-            case "Circle":
+            case "circle":
                 area = Math.PI * Math.pow(length, 2);
                 perimeter = 2 * Math.PI * length;
                 break;
